@@ -1,11 +1,14 @@
 import os
-
+import argparse
 import requests
 import dialogflow_v2 as dialogflow
+from dotenv import load_dotenv
 
-DIALOGFLOW_PROJECT_ID = os.getenv('project_id')
+load_dotenv()
+
+DIALOGFLOW_PROJECT_ID = os.getenv('PROJECT_ID')
 DIALOGFLOW_LANGUAGE_CODE = 'ru-RU'
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.getenv('ga-key-admin')
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.getenv('GA-KEY-ADMIN')
 
 
 def create_intent(project_id, display_name, training_phrases_parts,
@@ -38,8 +41,18 @@ def create_intent(project_id, display_name, training_phrases_parts,
 
 if __name__ == "__main__":
 
-    url = 'https://dvmn.org/media/filer_public/a7/db/a7db66c0-1259-4dac-9726-2d1fa9c44f20/questions.json'
-    response = requests.get(url).json()
+    args_parser = argparse.ArgumentParser()
+    args_parser.add_argument('-u', '--url', action='store', type=str, help='link to file for study', required=True)
+
+    args = args_parser.parse_args()
+
+    url = args.url
+    try:
+        response = requests.get(url).json()
+        response.raise_for_status()
+    except requests.exceptions.HTTPError as error:
+        print(str(error))
+        raise
 
     for key, item in response.items():
         display_name = key

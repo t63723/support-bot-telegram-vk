@@ -11,25 +11,25 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-monitoring_chat_id = os.getenv('monitoring_chat_id')
-monitoring_token = os.getenv('monitoring_token')
-monitoring_bot = Bot(token=monitoring_token)
+MONITORING_CHAT_ID = os.getenv('MONITORING_CHAT_ID')
+MONITORING_TOKEN = os.getenv('MONITORING_TOKEN')
+MONITORING_BOT = Bot(token=MONITORING_TOKEN)
 
 
 class LoggerForTelegram(logging.Handler):
 
     def emit(self, record):
         log_entry = self.format(record)
-        monitoring_bot.send_message(chat_id=monitoring_chat_id, text=log_entry)
+        MONITORING_BOT.send_message(chat_id=MONITORING_CHAT_ID, text=log_entry)
 
 
 logger = logging.getLogger("logger for telegram")
 logger.setLevel(logging.DEBUG)
 logger.addHandler(LoggerForTelegram())
 
-DIALOGFLOW_PROJECT_ID = os.getenv('project_id')
+DIALOGFLOW_PROJECT_ID = os.getenv('PROJECT_ID')
 DIALOGFLOW_LANGUAGE_CODE = 'ru-RU'
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.getenv('ga-key-client')
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.getenv('GA-KEY-CLIENT')
 
 
 def start(bot, update):
@@ -38,9 +38,9 @@ def start(bot, update):
 
 
 def answer(bot, update):
-    session_id = update.update_id
-    session_client = dialogflow.SessionsClient()
-    session = session_client.session_path(DIALOGFLOW_PROJECT_ID, session_id)
+    telegram_id = update.update_id
+    dialogflow_client = dialogflow.SessionsClient()
+    dialogflow__session = dialogflow_client.session_path(DIALOGFLOW_PROJECT_ID, telegram_id)
 
     text_to_be_analyzed = update.message.text
     text_input = dialogflow.types.TextInput(text=text_to_be_analyzed, language_code=DIALOGFLOW_LANGUAGE_CODE)
@@ -48,7 +48,7 @@ def answer(bot, update):
     query_input = dialogflow.types.QueryInput(text=text_input)
 
     try:
-        response = session_client.detect_intent(session=session, query_input=query_input)
+        response = dialogflow_client.detect_intent(session=dialogflow__session, query_input=query_input)
     except InvalidArgument as err:
         logger.critical(err)
         raise
@@ -66,8 +66,8 @@ def main():
 
     logger.info('bot started')
 
-    token = os.getenv("telegram_token")
-    updater = Updater(token)
+    TOKEN = os.getenv("TELEGRAM_TOKEN")
+    updater = Updater(TOKEN)
 
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", start))
