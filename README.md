@@ -37,7 +37,7 @@ $ python vk_support_bot.py
 ```
 
 ### Обучение
-Бот может быть обучен (файла для обучения 
+Бот может быть обучен (файл для обучения 
 [ссылка на пример](https://dvmn.org/media/filer_public/a7/db/a7db66c0-1259-4dac-9726-2d1fa9c44f20/questions.json))
 ```
 $ python train_support_bot.py
