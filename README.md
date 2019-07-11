@@ -10,15 +10,15 @@
 Описание содержания файла `.env`
 
 ```
-monitoring_chat_id=<ваш chatid в телеграм>
-monitoring_token=<токен бота для мониторинга ошибок>
+MONITORING_CHAT_ID=<ваш chatid в телеграм>
+MONITORING_TOKEN=<токен бота для мониторинга ошибок>
 
-telegram_token=<токен основного бота для телеграм>
-vk=<токен группы вконтакте>
+TELEGRAM_TOKEN=<токен основного бота для телеграм>
+VK=<токен группы вконтакте>
 
-project_id=<имя проекта на dialogflow.com>
-ga-key-client=<имя файла с ключами для подключения бота к dialogflow.com>
-ga-key-admin=<имя файла с ключами для обучения бота>
+PROJECT_ID=<имя проекта на dialogflow.com>
+GA-KEY-CLIENT=<имя файла с ключами для подключения бота к dialogflow.com>
+GA-KEY-ADMIN=<имя файла с ключами для обучения бота>
 ```
 
 ### Запуск
@@ -39,8 +39,9 @@ $ python vk_support_bot.py
 ### Обучение
 Бот может быть обучен (файл для обучения 
 [ссылка на пример](https://dvmn.org/media/filer_public/a7/db/a7db66c0-1259-4dac-9726-2d1fa9c44f20/questions.json))
-```
-$ python train_support_bot.py
+
+```sh
+$ python train_support_bot.py --url <file_url>
 ```
 
 ### Попробовать
