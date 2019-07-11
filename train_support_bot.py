@@ -47,14 +47,14 @@ if __name__ == "__main__":
     args = args_parser.parse_args()
 
     url = args.url
-    try:
-        response = requests.get(url).json()
-        response.raise_for_status()
-    except requests.exceptions.HTTPError as error:
-        print(str(error))
-        raise
 
-    for key, item in response.items():
+    response = requests.get(url)
+    if not response.ok:
+        print(f'Request error {response.status_code}')
+
+    response_json = response.json()
+
+    for key, item in response_json.items():
         display_name = key
         training_phrases_parts = item['questions']
         message_texts = [item['answer']]
