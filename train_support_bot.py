@@ -49,19 +49,21 @@ if __name__ == "__main__":
     url = args.url
 
     response = requests.get(url)
-    if not response.ok:
+
+    if response.ok:
+
+        response_json = response.json()
+
+        for key, item in response_json.items():
+            display_name = key
+            training_phrases_parts = item['questions']
+            message_texts = [item['answer']]
+
+            create_intent(
+                project_id=DIALOGFLOW_PROJECT_ID,
+                display_name=display_name,
+                training_phrases_parts=training_phrases_parts,
+                message_texts=message_texts
+            )
+    else:
         print(f'Request error {response.status_code}')
-
-    response_json = response.json()
-
-    for key, item in response_json.items():
-        display_name = key
-        training_phrases_parts = item['questions']
-        message_texts = [item['answer']]
-
-        create_intent(
-            project_id=DIALOGFLOW_PROJECT_ID,
-            display_name=display_name,
-            training_phrases_parts=training_phrases_parts,
-            message_texts=message_texts
-        )
